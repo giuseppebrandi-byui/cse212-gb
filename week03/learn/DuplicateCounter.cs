@@ -25,6 +25,16 @@
     private static int CountDuplicates(int[] data)
     {
         // Add code here.
-        return 0;
+        HashSet<int> distinctNumbers = new();
+        List<int> duplicateNumbers = new List<int>();
+        foreach (int number in data)
+        {
+            if (!distinctNumbers.Add(number))
+                duplicateNumbers.Add(number);
+        }
+
+        return duplicateNumbers.Count();
+        // https://ravindradevrani.medium.com/multiple-ways-to-find-duplicates-in-c-array-with-pros-and-cons-b570142ce506
+
     }
 }
