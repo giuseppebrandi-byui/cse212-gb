@@ -22,7 +22,36 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var noDuplicateWords = new HashSet<string>(words);
+        var results = new List<string>();
+        // To avoid duplication when the symmetric word has been checked against the original word.
+        var found = new HashSet<string>();
+
+        foreach (string word in words)
+        {
+            // Reverse the string
+            char[] wordToChars = word.ToCharArray();
+            // If the letters are the same (e.g. "aa"), continue.
+            if (wordToChars[0] == wordToChars[1])
+            {
+                continue;
+            }
+            Array.Reverse(wordToChars);
+            string symmetric = new string(wordToChars);
+
+            // Check if there is a symmetric in the array
+            if (noDuplicateWords.Contains(symmetric))
+            {
+                // Check if the pair has already been included
+                if (!found.Contains(word))
+                {
+                    found.Add(word);
+                    found.Add(symmetric);
+                    results.Add(word + " & " + symmetric); // am & ma
+                }
+            }
+        }
+        return results.ToArray();
     }
 
     /// <summary>
@@ -43,6 +72,16 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            string degreeName = fields[3];
+
+            if (!degrees.ContainsKey(degreeName))
+            {
+                degrees[degreeName] = 1;
+            }
+            else
+            {
+                degrees[degreeName] += 1;
+            }
         }
 
         return degrees;
@@ -67,7 +106,68 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var anagramLetters1 = new Dictionary<char, int>();
+        string wordLc1 = word1.ToLower();
+        string wordLc2 = word2.ToLower();
+        foreach (char letter in wordLc1)
+        {
+            if (letter == ' ')
+            {
+                continue;
+            }
+            if (!anagramLetters1.ContainsKey(letter))
+            {
+                anagramLetters1[letter] = 1;
+            }
+            else
+            {
+                anagramLetters1[letter] += 1;
+            }
+        }
+
+        var anagramLetters2 = new Dictionary<char, int>();
+        foreach (char letter in wordLc2)
+        {
+            if (letter == ' ')
+            {
+                continue;
+            }
+
+            if (!anagramLetters2.ContainsKey(letter))
+            {
+                anagramLetters2[letter] = 1;
+            }
+            else
+            {
+                anagramLetters2[letter] += 1;
+            }
+        }
+
+        if (!(anagramLetters1.Keys.Count == anagramLetters2.Keys.Count))
+        {
+            return false;
+        }
+
+        foreach (char letter in wordLc1)
+        {
+            if (letter == ' ')
+            {
+                continue;
+            }
+
+            if (!anagramLetters2.ContainsKey(letter))
+            {
+                return false;
+            }
+
+            if (anagramLetters1[letter] != anagramLetters2[letter])
+            {
+                return false;
+            }
+        }
+
+
+        return true;
     }
 
     /// <summary>
