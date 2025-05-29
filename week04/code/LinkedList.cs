@@ -213,7 +213,13 @@ public class LinkedList : IEnumerable<int>
     public IEnumerable Reverse()
     {
         // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        // replace this line with the correct yield return statement(s)
+        var current = _tail;
+        while (current is not null)
+        {
+            yield return current.Data;
+            current = current.Prev;
+        }
     }
 
     public override string ToString()
