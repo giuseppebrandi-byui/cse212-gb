@@ -15,6 +15,7 @@ public static class Recursion
     public static int SumSquaresRecursive(int n)
     {
         // TODO Start Problem 1
+        // Base case
         if (n <= 0)
         {
             return 0;
@@ -107,6 +108,10 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
+
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+
         // Base Cases
         if (s == 0)
             return 0;
@@ -119,8 +124,14 @@ public static class Recursion
 
         // TODO Start Problem 3
 
+        // Check if we have performed this before
+        if (remember.ContainsKey(s))
+            return remember[s];
+
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+
+        remember[s] = ways;
         return ways;
     }
 
@@ -140,6 +151,25 @@ public static class Recursion
     public static void WildcardBinary(string pattern, List<string> results)
     {
         // TODO Start Problem 4
+        // Identify at what index position is the wildcard - if returns -1 there is no wildcard;
+        var exists = pattern.IndexOf('*');
+        // If wildcard doen't exist, add the pattern to the list
+        if (exists == -1)
+        {
+            results.Add(pattern);
+        }
+        else
+        {
+            // Separate the digits before the wildcard
+            var firstbit = pattern[..exists];
+            // Separate the digits after the wildcard
+            var secondbit = pattern[(exists + 1)..];
+            // Substitute the wildcard with 0
+            WildcardBinary(firstbit + "0" + secondbit, results);
+            // Substitute the wildcard with 1
+            WildcardBinary(firstbit + "1" + secondbit, results);
+
+        }
     }
 
     /// <summary>
